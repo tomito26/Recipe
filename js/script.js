@@ -1,6 +1,9 @@
 const mealContainer = document.getElementById("meals")
+const favContainer = document.querySelector(".fav-meals")
+
 
 getRandomMeal()
+fetchFavMeals()
 async function getRandomMeal(){
     const resp = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
     const respData = await resp.json();
@@ -9,9 +12,11 @@ async function getRandomMeal(){
     displayRandomMeal(randomMeal,true);
 }
 async function getMealById(id){
-    const resp = await fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id);
-    const respData = await resp.json()
+    const resp = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const respData = await resp.json(); 
     const meal = respData.meals[0];
+
+    return meal;
 
 }
 async function getMealsBySearch(term){
@@ -30,7 +35,7 @@ function displayRandomMeal(mealData,random = false){
         </div>
         <div class="meal-body">
             <h4>${mealData.strMeal}</h4>
-            <button class="fav-btn" onClick=" "><i class="fas fa-heart"></i></button>
+            <button class="fav-btn"><i class="fas fa-heart"></i></button>
         </div>
  `;
    const likebtn = meal.querySelector(".meal-body .fav-btn");
@@ -42,6 +47,7 @@ function displayRandomMeal(mealData,random = false){
            addMeaLLocalStorage(mealData.idMeal)
            likebtn.classList.add("active");
        }
+   
    });
    
     mealContainer.appendChild(meal);
@@ -63,18 +69,27 @@ function getMealLocalStorage(){
 
 }
 async function fetchFavMeals(){
-    const mealIds = getMealLocalStorage();
+  // clean the container
+  favContainer.innerHTML = "";
 
-    const meals = [];
-    
-    for(let i=0;i<mealIds.length;i++){
-        const mealId = mealIds[i]
+  const mealIds = getMealLocalStorage();
 
-        await getMealById(mealId);
-    }
+  const meals = [];
 
-  
-
-
+  for (let i = 0; i < mealIds.length; i++) {
+    const mealId = mealIds[i];
+    meal = await getMealById(mealId);
+    addMealToFav(meal);
+  }
 }
+function addMealToFav(mealData){
+    const favMeal = document.createElement("li");
+   
+    favMeal.innerHTML = `
+        <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}">
+        <span>${mealData.strMeal}</span>   
+ `;
+   favContainer.appendChild(favMeal)
+
+};
 
