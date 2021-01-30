@@ -47,7 +47,7 @@ function displayRandomMeal(mealData,random = false){
            addMeaLLocalStorage(mealData.idMeal)
            likebtn.classList.add("active");
        }
-   
+       fetchFavMeals();
    });
    
     mealContainer.appendChild(meal);
@@ -87,9 +87,16 @@ function addMealToFav(mealData){
    
     favMeal.innerHTML = `
         <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}">
-        <span>${mealData.strMeal}</span>   
+        <span>${mealData.strMeal}</span>  
+        <button class="clear"><i class="fas fa-window-close"></i></button> 
  `;
-   favContainer.appendChild(favMeal)
+ const btn = favMeal.querySelector(".clear")
+ btn.addEventListener("click",()=>{
+     removeMealLocalStorage(mealData.idMeal);
+
+     fetchFavMeals()
+ })
+ favContainer.appendChild(favMeal)
 
 };
 
