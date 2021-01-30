@@ -56,11 +56,26 @@ header button{
     padding: 0;
 }
 .fav-meals li{
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 85px;
     /* padding :0.5rem; */
 
+}
+.fav-meals li .clear{
+    background-color: transparent;
+    border: none;
+    top: -0.1rem;
+    cursor: pointer;
+    right: -0.1rem;
+    position: absolute;
+    opacity: 0;
+    font-size: 1rem;
+    
+}
+.fav-meals li:hover .clear{
+    opacity: 1;
 }
 .fav-meals li img{
     border: 2px solid #FFFFFF;
